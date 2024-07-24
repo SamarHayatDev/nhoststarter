@@ -1,7 +1,6 @@
 // middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { nhost } from "./lib/nhost";
 
 export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
