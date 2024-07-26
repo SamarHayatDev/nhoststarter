@@ -10,6 +10,7 @@ const GET_BRANDS = gql`
   query GetBrands {
     brands {
       name
+      description
     }
   }
 `;
