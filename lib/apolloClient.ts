@@ -3,20 +3,15 @@ import { setContext } from "@apollo/client/link/context";
 import Cookies from "js-cookie";
 
 const httpLink = createHttpLink({
-  uri: process.env.NEXT_PUBLIC_NHOST_GRAPHQL_URL,
+  uri: "https://bzkgqcpnryqmebuuzowd.graphql.eu-central-1.nhost.run/v1",
 });
 
 const authLink = setContext((_, { headers }) => {
-  //   const session: any = Cookies.get("nhostSession");
-  //   const token = JSON.parse(session).accessToken;
-
-  //   console.log("skfhdjs", token);
-  // get the authentication token from local storage if it exists
-  // return the headers to the context so httpLink can read them
+  const token = Cookies.get("nhost-auth-token");
   return {
     headers: {
       ...headers,
-      authorization: `Bearer {YourToken}`,
+      authorization: token ? `Bearer ${token}` : "",
     },
   };
 });
@@ -25,3 +20,30 @@ export const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
+
+// import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+// import { setContext } from "@apollo/client/link/context";
+// import Cookies from "js-cookie";
+
+// const httpLink = createHttpLink({
+//   uri: "https://bzkgqcpnryqmebuuzowd.graphql.eu-central-1.nhost.run/v1",
+// });
+
+// const authLink = setContext((_, { headers }) => {
+//   const token = Cookies.get("nhost-auth-token");
+//   const authHeader = token ? `Bearer ${token}` : "";
+
+//   console.log("Authorization Header:", authHeader); // Log the authorization header
+
+//   return {
+//     headers: {
+//       ...headers,
+//       authorization: authHeader,
+//     },
+//   };
+// });
+
+// export const client = new ApolloClient({
+//   link: authLink.concat(httpLink),
+//   cache: new InMemoryCache(),
+// });

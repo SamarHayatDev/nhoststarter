@@ -1,15 +1,12 @@
-import Test from "@/components/Test";
-import useTodosData from "@/hooks/useTodosData";
-import { Suspense } from "react";
+"use client";
+
+import { nhost } from "@/lib/nhost";
 
 const Home = () => {
-  // const { allData } = useTodosData();
   return (
-    <>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Test />
-      </Suspense>
-    </>
+    <main className="container mx-auto pt-5">
+      <h1>Hello </h1>
+    </main>
   );
 };
 

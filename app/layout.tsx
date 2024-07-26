@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import NhostProviderContext from "@/providers/NhostProviderContext";
 import ApolloProviderContext from "@/providers/ApolloProviderContext";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",

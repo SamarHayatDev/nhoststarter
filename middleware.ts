@@ -1,29 +1,31 @@
-// middleware.ts
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { nhost } from "@/lib/nhost";
 
-export async function middleware(request: NextRequest) {
-  const url = new URL(request.url);
+// Middleware function to handle redirects based on authentication
+export async function middleware(req: NextRequest) {
+  const token = req.cookies.get("nhost-auth-token");
 
-  const accessToken: any =
-    url.searchParams.get("refreshToken") ||
-    request.cookies.get("nhostRefreshToken")?.value;
+  // List of paths that should not be redirected
+  const publicPaths = ["/signup", "/login"];
 
-  const loggedInUserNotAccessPaths = request.nextUrl.pathname === "/login";
-
-  if (loggedInUserNotAccessPaths) {
-    if (accessToken) {
-      return NextResponse.redirect(new URL("/", request.url));
-    } else {
-      return;
+  // Check if user is logged in
+  if (token) {
+    // Redirect logged-in users from signup and login pages to the home page
+    if (publicPaths.some((path) => req.nextUrl.pathname.startsWith(path))) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+  } else {
+    // Redirect users without token to the signup page
+    if (publicPaths.every((path) => !req.nextUrl.pathname.startsWith(path))) {
+      return NextResponse.redirect(new URL("/signup", req.url));
     }
   }
 
-  if (!accessToken) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+  // Allow request to continue
+  return NextResponse.next();
 }
 
+// Middleware configuration
 export const config = {
-  matcher: ["/:path", "/login"],
+  matcher: ["/((?!api|_next|static|public).*)"], // Exclude API, static files, and public paths
 };
