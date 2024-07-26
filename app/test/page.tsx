@@ -25,9 +25,13 @@ const Page: React.FC = () => {
     <div>
       <h1>Brand Names</h1>
       <ul>
-        {data.brands.map((brand: { name: string }) => (
-          <li key={brand.name}>{brand.name}</li>
-        ))}
+        {data.brands.map(
+          (brand: { name: string; description: string }, index: number) => (
+            <li key={index}>
+              <strong>{brand.name}</strong>: {brand.description}
+            </li>
+          )
+        )}
       </ul>
     </div>
   );
